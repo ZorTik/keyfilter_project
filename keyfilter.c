@@ -17,6 +17,7 @@ typedef struct {
     int ends[MAX_C];
 } match_res;
 
+void upper(char* input);
 match_res matchlocs(char* db, char* in);
 
 
@@ -35,6 +36,9 @@ int main(int argc, char* argv[]) {
         input_db = argv[2];
         input_addr = argv[1];
     }
+    // Convert the inputs to upper case (case insensitive)
+    upper(input_db);
+    upper(input_addr);
     match_res m_res = matchlocs(input_db, input_addr);
     // Match count
     int m_count = m_res.amount;
@@ -67,6 +71,20 @@ int main(int argc, char* argv[]) {
                 printf("%c", chars[i]);
             }
         }
+    }
+}
+
+/**
+ * Convert provided char array to upper case.
+ * ** input: The input
+*/
+void upper(char* input) {
+    for (int i = 0; i < strlen(input); i++) {
+        int c = input[i];
+        if (c >= 'a' && c <= 'z') {
+            c = 'A' + (c - 'a');
+        }
+        input[i] = c;
     }
 }
 
