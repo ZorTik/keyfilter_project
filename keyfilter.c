@@ -71,7 +71,9 @@ int main(int argc, char* argv[]) {
 }
 
 /**
- * Stores starts and ends of matching substrings.
+ * Scans the provided db string with provided input and
+ * returns all matches according to project specification.
+ * 
  * ** db: The database string separated with newline symbols
  * ** in The requested input string
  * 
