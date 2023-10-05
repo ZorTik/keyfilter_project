@@ -4,20 +4,23 @@
 #ifndef DELIM
 // Define rows delimiter
 // LF
-//#define DELIM 10
+#define DELIM 10
 // ,
-#define DELIM 44
+//#define DELIM 44
 // Max count
 #define MAX_C 42
 #endif
 
+typedef unsigned __int64 str_i;
+
 typedef struct {
     int amount;
-    int starts[MAX_C];
-    int ends[MAX_C];
+    str_i starts[MAX_C];
+    str_i ends[MAX_C];
 } match_res;
 
-void upper(char* input);
+void strupper(char* input);
+int strcontains(char* input, int c);
 match_res matchlocs(char* db, char* in);
 
 
@@ -36,22 +39,30 @@ int main(int argc, char* argv[]) {
         input_db = argv[2];
         input_addr = argv[1];
     }
+    if (input_db[0] == DELIM || input_db[strlen(input_db) - 1] == DELIM) {
+        printf("Input can't start or end with %c!", DELIM);
+        return 0;
+    }
+    if (strcontains(input_addr, DELIM)) {
+        printf("Input can't contain %c", DELIM);
+        return 0;
+    }
     // Convert the inputs to upper case (case insensitive)
-    upper(input_db);
-    upper(input_addr);
+    strupper(input_db);
+    strupper(input_addr);
     match_res m_res = matchlocs(input_db, input_addr);
     // Match count
     int m_count = m_res.amount;
     // Match start indexes
-    int* starts = m_res.starts;
+    str_i* starts = m_res.starts;
     // Match end indexes
-    int* ends = m_res.ends;
+    str_i* ends = m_res.ends;
 
     if (m_count == 0) {
         printf("Not found");
     } else if (m_count == 1) {
         printf("Found: ");
-        int i = starts[0];
+        str_i i = starts[0];
         while (i <= ends[0]) {
             printf("%c", input_db[i++]);
         }
@@ -78,14 +89,23 @@ int main(int argc, char* argv[]) {
  * Convert provided char array to upper case.
  * ** input: The input
 */
-void upper(char* input) {
-    for (int i = 0; i < strlen(input); i++) {
+void strupper(char* input) {
+    for (str_i i = 0; i < strlen(input); i++) {
         int c = input[i];
         if (c >= 'a' && c <= 'z') {
             c = 'A' + (c - 'a');
         }
         input[i] = c;
     }
+}
+
+int strcontains(char* input, int c) {
+    for (str_i i = 0; i < strlen(input); i++) {
+        if (input[i] == c) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /**
@@ -98,14 +118,16 @@ void upper(char* input) {
  * returns: The match result
 */
 match_res matchlocs(char* db, char* in) {
+    // Current location (match) index
     int loci = 0;
-    int reli = 0;
+    // Relative index in the current match
+    str_i reli = 0;
     int match = 0;
     int stored = 0;
 
     match_res res;
     
-    for (int i = 0; i < strlen(db); i++) {
+    for (str_i i = 0; i < strlen(db); i++) {
         int c = db[i];
         if (i == 0 && c == in[0]) {
             // Start pos equality

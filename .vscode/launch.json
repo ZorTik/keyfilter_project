@@ -6,8 +6,8 @@
             "request": "launch",
             "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
             "args": [
-                "Br",
-                "Praha,Olomouc,Bratislava,Ostrava,Brno"
+                "Brn",
+                "Praha,Brno,Bruntal,Bratislava"
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
