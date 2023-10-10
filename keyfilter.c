@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #ifndef DELIM
 // Define rows delimiter
@@ -19,6 +20,7 @@ typedef struct {
     str_i ends[MAX_C];
 } match_res;
 
+void read_db(char* str);
 void strupper(char* input);
 int strcontains(char* input, int c);
 match_res matchlocs(char* db, char* in);
@@ -33,12 +35,10 @@ int main(int argc, char* argv[]) {
     char* input_db = "";
     char* input_addr = "";
     if (argc == 2) {
-        // Database and input provided.
-        input_db = argv[1];
-    } else if (argc == 3) {
-        input_db = argv[2];
         input_addr = argv[1];
     }
+    char input_db[(100 * 43) * 8];
+    read_db(&input_db);
     if (input_db[0] == DELIM || input_db[strlen(input_db) - 1] == DELIM) {
         printf("Input can't start or end with %c!", DELIM);
         return 0;
@@ -83,6 +83,17 @@ int main(int argc, char* argv[]) {
             }
         }
     }
+}
+
+void read_db(char* str) {
+    char c;
+    int i = 0;
+    do {
+        c = getchar();
+        str[i] = c;
+        i++;
+    } while (c != EOF);
+    str[i] = '\0';
 }
 
 /**
